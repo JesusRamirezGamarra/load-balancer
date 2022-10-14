@@ -126,6 +126,7 @@ module.exports = {
             autorestart: true,
             instances: 'max',
             increment_var : 'PORT',
+            node_args: "--harmony",
             env: {
                 "PORT": 8081,
                 "MODE": "DEV"
@@ -335,3 +336,72 @@ http://localhost/api/randoms
 └────────────────────────────────────────┘└────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+
+
+
+NOTA : 
+
+* Equivalentes [ver mas](https://stackoverflow.com/questions/31579509/can-pm2-run-an-npm-start-script)
+
+Is there a way for pm2 to run an npm start script or do you just have to run pm2 start app.js
+
+So in development
+```bash
+npm start
+```
+Then in production with pm2 you would run something like
+```bash
+pm2 start 'npm start'
+```
+There is an equivalent way to do this in forever:
+```bash
+forever start -c "npm start" ./
+```
+
+* support
+
+PM2 now supports npm start:
+```bash
+pm2 start npm -- start
+```
+To assign a name to the PM2 process, use the --name option:
+```bash
+pm2 start npm --name "app name" -- start
+```
+
+* Run  [ver mas])(https://stackoverflow.com/questions/31579509/can-pm2-run-an-npm-start-script)
+  
+  pm2 start "npm run start" 
+  ```js
+  module.exports = {
+    apps: [
+        {
+            name: 'app01',
+            script: 'src/index.js',
+            watch: true,
+            autorestart: true,
+            // instances: 4,
+            // args: '--PORT=8080',
+        },
+        {
+            name: 'app02',
+            script: 'src/index.js',
+            watch: true,
+            autorestart: true,
+            instances: 'max',
+            increment_var : 'PORT',
+            env: {
+                "PORT": 8081,
+                "MODE": "DEV"
+            },
+            env_production: {
+                NODE_ENV: "PROD"
+            }                        
+        }
+    ],
+};
+
+  ```
+  pm2 start ecosystem.config.cjs  --only app01
+  pm2 start ecosystem.config.cjs --env PROD --only app01
+  pm2 start ecosystem.config.cjs --env PROD --only app01

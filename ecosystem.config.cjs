@@ -13,12 +13,16 @@ module.exports = {
             script: 'src/index.js',
             watch: true,
             autorestart: true,
-            instances: 'max',
+            instances: '4',
             increment_var : 'PORT',
+            node_args: "--harmony",
             env: {
                 "PORT": 8081,
                 "MODE": "DEV"
-            }            
+            },
+            env_production: {
+                NODE_ENV: "PROD"
+            }                        
             // args: '--PORT=8081',
         }//,
         // {
