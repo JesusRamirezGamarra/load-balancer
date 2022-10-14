@@ -124,28 +124,40 @@ ps -ef
 module.exports = {
     apps: [
         {
-            name: 'app01',
+            name: 'app-api-01',
             script: 'src/index.js',
-            watch: true,
+            watch: true,                    // true : la aplicacion se auto restart si existe un cambio en el directorio del app.
+            max_memory_restart : '100M',    // Maximo de memoria, si es alcanzado el APP hace restart
             autorestart: true,
             // instances: 4,
             // args: '--PORT=8080',
         },
         {
-            name: 'app02',
+            name: 'app-api-02',
             script: 'src/index.js',
             watch: true,
             autorestart: true,
-            instances: 'max',
-            increment_var : 'PORT',
+            instances: '1',
+            increment_var : 'PORT',         // Incrementa el PORT ( hasta encontrar disponible ) x cada instancia al iniciar o reiniciar.
             node_args: "--harmony",
+            cron_restart : "59 23 * * *",   // Patron se reinicio 23:59 se auto restart.
+            
             env: {
                 "PORT": 8081,
                 "MODE": "DEV"
-            }            
-        }
+            },
+            env_production: {
+                NODE_ENV: "PROD"
+            }                        
+            // args: '--PORT=8081',
+        }//,
+        // {
+        //     script: './service-worker/',
+        //     watch: ['./service-worker'],
+        // },
     ],
 };
+
 
 ```
 
@@ -269,8 +281,7 @@ pm2 delete all
 
 2. configuracion : `nginx.conf` :
 
-```config
-
+```
 events {}
 
 http {
@@ -384,24 +395,29 @@ pm2 start npm --name "app name" -- start
 * Run  [ver mas])(https://stackoverflow.com/questions/31579509/can-pm2-run-an-npm-start-script)
   
   pm2 start "npm run start" 
-  ```js
-  module.exports = {
+
+```js
+module.exports = {
     apps: [
         {
-            name: 'app01',
+            name: 'app-api-01',
             script: 'src/index.js',
-            watch: true,
+            watch: true,                    // true : la aplicacion se auto restart si existe un cambio en el directorio del app.
+            max_memory_restart : '100M',    // Maximo de memoria, si es alcanzado el APP hace restart
             autorestart: true,
             // instances: 4,
             // args: '--PORT=8080',
         },
         {
-            name: 'app02',
+            name: 'app-api-02',
             script: 'src/index.js',
             watch: true,
             autorestart: true,
-            instances: 'max',
-            increment_var : 'PORT',
+            instances: '1',
+            increment_var : 'PORT',         // Incrementa el PORT ( hasta encontrar disponible ) x cada instancia al iniciar o reiniciar.
+            node_args: "--harmony",
+            cron_restart : "59 23 * * *",   // Patron se reinicio 23:59 se auto restart.
+            
             env: {
                 "PORT": 8081,
                 "MODE": "DEV"
@@ -409,11 +425,15 @@ pm2 start npm --name "app name" -- start
             env_production: {
                 NODE_ENV: "PROD"
             }                        
-        }
+            // args: '--PORT=8081',
+        }//,
+        // {
+        //     script: './service-worker/',
+        //     watch: ['./service-worker'],
+        // },
     ],
 };
-
-  ```
-  pm2 start ecosystem.config.cjs  --only app01
-  pm2 start ecosystem.config.cjs --env PROD --only app01
-  pm2 start ecosystem.config.cjs --env PROD --only app01
+```
+pm2 start ecosystem.config.cjs  --only app01
+pm2 start ecosystem.config.cjs --env PROD --only app01
+pm2 start ecosystem.config.cjs --env PROD --only app01
