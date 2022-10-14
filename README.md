@@ -41,6 +41,18 @@ pm2 start ./miservidor.js -- --port=8082 --modo=fork
 ```
 ## PM2 _ answer
 
+
+URL : https://app.pm2.io/bucket/6348d95eb512061ac73e129b/backend/overview/servers
+```
+pm2 plus
+```
+  <p align="center">    
+    <img src="./public/img/pm2_plus.png" alt="pm2 plus" >    
+  </p>
+
+
+
+
 1. Se agrega sobre `config.js` las consideraciones para soportar el argumento : `MODO` considerando el default : `FORK`
 
 ```js
